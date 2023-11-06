@@ -7,7 +7,7 @@ use serde::{
 
 use crate::{
     Array, Buffer, ContainerField, EntityMetadataItem, EntityMetadataLoop, FieldOfBitField, Mapper,
-    PString, ParticleData, Switch, Type,
+    PString, ParticleData, Switch, TopBitSetTerminatedArray, Type,
 };
 
 struct TypeVisitor;
@@ -138,6 +138,15 @@ impl<'de> Visitor<'de> for TypeVisitor {
                 })?;
 
                 Ok(Type::ParticleData(particle_data))
+            }
+            "topBitSetTerminatedArray" => {
+                let top_bit_set_terminated_array: TopBitSetTerminatedArray = seq.next_element()?.ok_or_else(|| {
+                    de::Error::custom(
+                        "didn't get expected arguments for second list argument for topBitSetTerminatedArray function",
+                    )
+                })?;
+
+                Ok(Type::TopBitSetTerminatedArray(top_bit_set_terminated_array))
             }
 
             _ => Err(de::Error::custom(format!(

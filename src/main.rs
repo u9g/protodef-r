@@ -21,6 +21,7 @@ enum Type {
     EntityMetadataLoop(EntityMetadataLoop),
     EntityMetadataItem(EntityMetadataItem),
     ParticleData(ParticleData),
+    TopBitSetTerminatedArray(TopBitSetTerminatedArray),
 }
 
 #[derive(Debug, Deserialize)]
@@ -62,6 +63,12 @@ enum Count {
 struct ParticleData {
     #[serde(alias = "compareTo")]
     compare_to: String,
+}
+
+#[derive(Debug, Deserialize)]
+struct TopBitSetTerminatedArray {
+    #[serde(alias = "type")]
+    element_type: Box<Type>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -128,7 +135,12 @@ struct Mapper {
 #[derive(Deserialize, Debug)]
 struct Protocol {
     types: HashMap<String, Type>,
-    // handshaking: HashMap<String, TypesHolder>,
+    handshaking: HashMap<String, TypesHolder>,
+    status: HashMap<String, TypesHolder>,
+    login: HashMap<String, TypesHolder>,
+    #[serde(alias = "configutation")]
+    configuration: HashMap<String, TypesHolder>,
+    play: HashMap<String, TypesHolder>,
 }
 
 #[derive(Deserialize, Debug)]
